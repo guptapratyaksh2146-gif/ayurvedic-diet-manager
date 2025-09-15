@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayurvedic Diet Management System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; overflow-x: hidden; }
+        
+        /* Header */
+        .header { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; transition: all 0.3s ease; box-shadow: 0 2px 20px rgba(72, 187, 120, 0.3); }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: white; text-decoration: none; transition: opacity 0.3s; }
+        .nav-links a:hover { opacity: 0.8; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .btn { padding: 0.5rem 1.5rem; border: none; border-radius: 25px; cursor: pointer; text-decoration: none; transition: all 0.3s; }
+        .btn-outline { background: transparent; color: white; border: 2px solid white; transition: all 0.4s ease; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #68d391; }
+        .btn-primary { background: white; color: #38a169; transition: all 0.4s ease; }
+        .btn-primary:hover { background: #68d391; color: white; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        
+        /* Hero Section */
+        .hero { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%); animation: float 8s ease-in-out infinite; }
+        .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
+        .particle { position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.6); border-radius: 50%; animation: particleFloat 15s infinite linear; }
+        @keyframes particleFloat { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; animation: slideInDown 1s ease-out; position: relative; z-index: 2; }
+        .typing-text { border-right: 3px solid rgba(255,255,255,0.8); animation: blink 1s infinite; }
+        @keyframes blink { 0%, 50% { border-color: rgba(255,255,255,0.8); } 51%, 100% { border-color: transparent; } }
+        .feature-card { perspective: 1000px; }
+        .feature-card:hover { transform: translateY(-8px) rotateX(5deg) rotateY(5deg); }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; animation: slideInUp 1s ease-out 0.3s both; position: relative; z-index: 2; }
+        @keyframes slideInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeIn 1s ease-out 0.6s both; position: relative; z-index: 2; }
+        .btn-large { padding: 1rem 2rem; font-size: 1.1rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Features Section */
+        .features { padding: 4rem 2rem; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #333; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature-card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); text-align: center; transition: all 0.4s ease; border-top: 4px solid #48bb78; position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(72,187,120,0.1), transparent); transition: left 0.6s; }
+        .feature-card:hover::before { left: 100%; }
+        .feature-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(72,187,120,0.2); border-top-color: #38a169; }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; transition: all 0.3s ease; cursor: pointer; }
+        .feature-card:hover .feature-icon { transform: scale(1.2) rotate(10deg); }
+        .feature-icon:hover { animation: bounce 0.6s ease; }
+        @keyframes bounce { 0%, 20%, 60%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 80% { transform: translateY(-5px); } }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: #38a169; transition: color 0.3s ease; }
+        
+        /* About Section */
+        .about { padding: 4rem 2rem; }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .about-text h2 { font-size: 2rem; margin-bottom: 1rem; color: #333; }
+        .about-text p { margin-bottom: 1rem; color: #666; }
+        .about-image { text-align: center; font-size: 8rem; }
+        
+        /* Stats Section */
+        .stats { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 3rem 2rem; position: relative; overflow: hidden; }
+        .stats::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; position: relative; z-index: 2; }
+        .stat-item h3 { font-size: 2.5rem; margin-bottom: 0.5rem; animation: pulse 2s ease-in-out infinite; }
+        .stat-item p { font-size: 1.1rem; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .parallax { transform: translateY(0); transition: transform 0.1s ease-out; }
+        .about-image { font-size: 8rem; animation: rotate 20s infinite linear; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .counter { font-size: 2.5rem; font-weight: bold; color: white; }
+        
+        /* Footer */
+        .footer { background: #333; color: white; padding: 2rem; text-align: center; }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer p { margin-bottom: 1rem; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav { flex-direction: column; gap: 1rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .about-content { grid-template-columns: 1fr; }
+            .about-image { order: -1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">🕉️ AyurDiet</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Ayurvedic Diet Management System</h1>
+        <p>Holistic nutrition management based on ancient Ayurvedic principles. Personalized diet plans, dosha assessment, and traditional recipes for optimal health and wellness.</p>
+        <div class="hero-buttons">
+            <a href="signup.html" class="btn btn-primary btn-large">Get Started</a>
+            <a href="#features" class="btn btn-outline btn-large">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Patient Management</h3>
+                    <p>Comprehensive patient profiles with dosha assessment, dietary preferences, and health tracking for personalized care.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🥗</div>
+                    <h3>Food Database</h3>
+                    <p>Extensive database of 35+ Ayurvedic foods with complete nutritional data, taste classification, and dosha effects.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Diet Chart Generation</h3>
+                    <p>Automated diet plan creation based on individual dosha types, health conditions, and seasonal recommendations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🍲</div>
+                    <h3>Traditional Recipes</h3>
+                    <p>Collection of authentic Ayurvedic recipes with preparation instructions and dosha balancing properties.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Dosha Balance</h3>
+                    <p>Foods and recipes categorized by their effects on Vata, Pitta, and Kapha doshas for optimal constitution balance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Secure Access</h3>
+                    <p>Role-based access control for doctors and patients with secure authentication and data privacy protection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 4rem; margin-bottom: 20px; animation: pulse 2s ease-in-out infinite;">🕉️</div>
+                        <h2 style="color: #38a169; font-size: 2.2rem; margin-bottom: 20px;">Ancient Ayurvedic Wisdom</h2>
+                    </div>
+                    <div style="background: linear-gradient(145deg, #f0fff4, #e6fffa); padding: 30px; border-radius: 20px; border-left: 5px solid #48bb78; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(72,187,120,0.1);">
+                        <p style="font-size: 1.3rem; font-style: italic; color: #2d3748; text-align: center; margin-bottom: 15px;"><strong>"When diet is wrong, medicine is of no use.<br>When diet is correct, medicine is of no need."</strong></p>
+                        <p style="text-align: center; color: #48bb78; font-weight: 600;">- Ancient Ayurvedic Proverb</p>
+                    </div>
+                    <p>Ayurveda, the ancient Indian system of medicine, emphasizes the importance of proper nutrition based on individual constitution (Prakriti) and current state of health (Vikriti).</p>
+                    <p style="margin: 20px 0;"><strong style="color: #38a169;">Discover the path to wellness:</strong> Balance your doshas, nourish your body, and heal your soul through the timeless wisdom of Ayurvedic nutrition.</p>
+                    <p>Our system incorporates the six tastes (Rasa), food potency (Virya), digestibility, and seasonal considerations to create personalized diet recommendations for optimal health.</p>
+                </div>
+                <div class="about-image parallax" data-speed="0.3">🌿</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>35+</h3>
+                    <p>Ayurvedic Foods</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10+</h3>
+                    <p>Traditional Recipes</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <p>Dosha Types</p>
+                </div>
+                <div class="stat-item">
+                    <h3>6</h3>
+                    <p>Taste Categories</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Ayurvedic Diet Management System. Built for holistic health and wellness.</p>
+            <p>Developed for Ministry of Ayush / All India Institute of Ayurveda (AIIA)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(72, 187, 120, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe feature cards and other elements
+        document.querySelectorAll('.feature-card, .about-content, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const hero = document.querySelector('.hero');
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            hero.appendChild(particlesContainer);
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Typing effect
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            element.classList.add('typing-text');
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing-text');
+                }
+            }
+            type();
+        }
+        
+        // Counter animation
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            function updateCounter() {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            }
+            updateCounter();
+        }
+        
+        // Parallax scrolling
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.dataset.speed || 0.5;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+        
+        // Initialize effects
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            
+            // Typing effect for hero title
+            setTimeout(() => {
+                const heroTitle = document.querySelector('.hero h1');
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 80);
+            }, 1500);
+            
+            // Animate counters when they come into view
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.textContent.replace('+', ''));
+                        animateCounter(counter, target);
+                        counterObserver.unobserve(counter);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.stat-item h3').forEach(counter => {
+                counter.classList.add('counter');
+                counterObserver.observe(counter);
+            });
+        });
+    </script>
+</body>
+</html>
